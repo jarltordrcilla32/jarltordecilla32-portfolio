@@ -359,7 +359,7 @@ export default function Portfolio() {
           <div className="flex flex-col items-center gap-8">
             <a
               href={personalData.resumeLink}
-              download="Jarl-Wayne_Dave-Tordecilla_Resume.pdf"
+              download="Jarl-Wayne-Dave-Tordecilla_Resume.pdf"
               className={`inline-flex items-center gap-3 px-12 py-5 rounded-2xl text-xl font-semibold tracking-wide transition-all transform hover:scale-105 shadow-2xl ${
                 isDark 
                   ? 'bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white' 
