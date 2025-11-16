@@ -3,7 +3,8 @@ import portfolio_photo from './assets/portfolio_photo.jpg';
 import connectgreen_web from './assets/connectgreen_web.png';
 import connectgreen_mobile from './assets/connectgreen_mobile.png';
 import greenconnect_thumbnail from './assets/greenconnect_thumbnail.png';
-import { Moon, Sun, Menu, X, Github, Linkedin, Facebook, Mail, Download, Grid3x3, List, Award, BookOpen, ChevronDown, Code2, Database, Wrench, Phone, Sparkles } from 'lucide-react';
+import resume from './assets/resume.pdf';
+import { Moon, Sun, Menu, X, Github, Linkedin, Facebook, Mail, Download, Grid3x3, List, Award, BookOpen, ChevronDown, Code2, Database, Wrench, Phone, Sparkles, SquareLibrary, ShieldCheck } from 'lucide-react';
 
 // Import Google Fonts
 const fontLink = document.createElement('link');
@@ -11,8 +12,12 @@ fontLink.href = 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@
 fontLink.rel = 'stylesheet';
 document.head.appendChild(fontLink);
 
+// ============================================
+// CUSTOMIZABLE DATA - EDIT THIS SECTION
+// ============================================
 const personalData = {
   name: "Jarl Wayne Dave Tordecilla",
+  shortName: "Jarl Tordecilla", // For navbar
   tagline: "Full-Stack Developer | Flutter • MERN Stack | BSIT Student @ NU Manila",
   heroTitle: "BUILDING THE WEB OF YOUR DREAMS",
   heroSubtitle: "HI! THIS IS JARL TORDECILLA HERE! I'M A FULL-STACK DEVELOPER FROM QUEZON CITY AND A BSIT STUDENT AT NU MANILA",
@@ -20,7 +25,7 @@ const personalData = {
   photo: portfolio_photo,
   email: "tordecillajarlwaynedave@gmail.com",
   phone: "+63-976-193-9646",
-  resumeLink: "#",
+  resumeLink: resume,
   
   socials: {
     github: "https://github.com/jarltordrcilla32",
@@ -88,6 +93,9 @@ const personalData = {
   ]
 };
 
+// ============================================
+// MAIN COMPONENT
+// ============================================
 export default function Portfolio() {
   const [isDark, setIsDark] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -95,6 +103,7 @@ export default function Portfolio() {
   const [visibleSections, setVisibleSections] = useState(new Set());
   const [activeSection, setActiveSection] = useState('hero');
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [lightboxImage, setLightboxImage] = useState(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -159,7 +168,7 @@ export default function Portfolio() {
       } rounded-full px-6 py-3 max-w-4xl w-11/12`} style={{ fontFamily: "'Outfit', sans-serif" }}>
         <div className="flex justify-between items-center">
           <div className={`text-xl font-bold tracking-wide ${isDark ? 'text-blue-400' : 'text-amber-700'}`}>
-            {personalData.name}
+            {personalData.shortName}
           </div>
           
           {/* Desktop Navigation */}
@@ -231,6 +240,39 @@ export default function Portfolio() {
         )}
       </nav>
 
+      {/* Lightbox Modal */}
+      {lightboxImage && (
+        <div 
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 animate-fade-in"
+          onClick={() => setLightboxImage(null)}
+        >
+          <button
+            onClick={() => setLightboxImage(null)}
+            className={`absolute top-8 right-8 p-3 rounded-full transition-all hover:scale-110 ${
+              isDark 
+                ? 'bg-slate-800 hover:bg-slate-700 text-slate-300' 
+                : 'bg-white hover:bg-stone-100 text-stone-700'
+            }`}
+          >
+            <X size={28} />
+          </button>
+          <div className="max-w-6xl max-h-[90vh] w-full">
+            <img 
+              src={lightboxImage.src} 
+              alt={lightboxImage.title}
+              className="w-full h-full object-contain rounded-2xl shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            />
+            <div className={`mt-6 text-center ${isDark ? 'text-white' : 'text-white'}`}>
+              <h3 className="text-3xl font-bold mb-2" style={{ fontFamily: isDark ? "'Space Grotesk', sans-serif" : "'Playfair Display', serif" }}>
+                {lightboxImage.title}
+              </h3>
+              <p className="text-lg">{lightboxImage.description}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Hero Section */}
       <section 
         id="hero" 
@@ -272,7 +314,7 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* About Section - REDESIGNED */}
+      {/* About Section */}
       <section 
         id="about" 
         className={`py-32 px-6 transition-opacity duration-1000 ${
@@ -317,7 +359,7 @@ export default function Portfolio() {
           <div className="flex flex-col items-center gap-8">
             <a
               href={personalData.resumeLink}
-              download
+              download="Jarl-Wayne_Dave-Tordecilla_Resume.pdf"
               className={`inline-flex items-center gap-3 px-12 py-5 rounded-2xl text-xl font-semibold tracking-wide transition-all transform hover:scale-105 shadow-2xl ${
                 isDark 
                   ? 'bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white' 
@@ -421,20 +463,20 @@ export default function Portfolio() {
               <div className="space-y-4">
                 <a 
                   href={`mailto:${personalData.email}`} 
-                  className={`flex items-center gap-3 text-lg hover:underline break-words ${isDark ? 'text-slate-300' : 'text-stone-700'}`}
+                  className={`flex items-start gap-3 text-base hover:underline break-all ${isDark ? 'text-slate-300' : 'text-stone-700'}`}
                 >
-                  <Mail size={20} className={isDark ? 'text-blue-400' : 'text-amber-600'} />
-                  {personalData.email}
+                  <Mail size={20} className={`flex-shrink-0 mt-0.5 ${isDark ? 'text-blue-400' : 'text-amber-600'}`} />
+                  <span className="leading-tight">{personalData.email}</span>
                 </a>
                 <a 
                   href={`tel:${personalData.phone}`} 
-                  className={`flex items-center gap-3 text-lg hover:underline ${isDark ? 'text-slate-300' : 'text-stone-700'}`}
+                  className={`flex items-center gap-3 text-base hover:underline ${isDark ? 'text-slate-300' : 'text-stone-700'}`}
                 >
-                  <Phone size={20} className={isDark ? 'text-blue-400' : 'text-amber-600'} />
+                  <Phone size={20} className={`flex-shrink-0 ${isDark ? 'text-blue-400' : 'text-amber-600'}`} />
                   {personalData.phone}
                 </a>
               </div>
-              <p className={`mt-6 text-lg ${isDark ? 'text-slate-400' : 'text-stone-600'}`}>
+              <p className={`mt-6 text-base ${isDark ? 'text-slate-400' : 'text-stone-600'}`}>
                 Let's connect and create something amazing together!
               </p>
             </div>
@@ -455,10 +497,10 @@ export default function Portfolio() {
           </h2>
 
           {/* Bento Grid Layout */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 auto-rows-fr">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             
-            {/* Languages - Takes 2 columns, taller */}
-            <div className={`md:col-span-2 md:row-span-2 p-12 rounded-3xl transition-all hover:scale-[1.02] duration-300 relative overflow-hidden ${
+            {/* Languages - Takes 2 columns, auto height */}
+            <div className={`md:col-span-2 p-12 rounded-3xl transition-all hover:scale-[1.02] duration-300 relative overflow-hidden ${
               isDark ? 'bg-slate-800 border border-slate-700 hover:shadow-2xl hover:shadow-blue-500/20' : 'bg-white border border-stone-200 shadow-2xl hover:shadow-2xl hover:shadow-amber-500/30'
             }`}>
               <div className={`absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl opacity-20 ${
@@ -491,8 +533,8 @@ export default function Portfolio() {
               </div>
             </div>
 
-            {/* Frameworks - Takes 2 columns, taller */}
-            <div className={`md:col-span-2 md:row-span-2 p-12 rounded-3xl transition-all hover:scale-[1.02] duration-300 relative overflow-hidden ${
+            {/* Frameworks - Takes 2 columns, auto height */}
+            <div className={`md:col-span-2 p-12 rounded-3xl transition-all hover:scale-[1.02] duration-300 relative overflow-hidden ${
               isDark ? 'bg-slate-800 border border-slate-700 hover:shadow-2xl hover:shadow-blue-500/20' : 'bg-white border border-stone-200 shadow-2xl hover:shadow-2xl hover:shadow-amber-500/30'
             }`}>
               <div className={`absolute bottom-0 left-0 w-64 h-64 rounded-full blur-3xl opacity-20 ${
@@ -502,7 +544,7 @@ export default function Portfolio() {
                 <div className={`w-24 h-24 rounded-3xl flex items-center justify-center mb-8 ${
                   isDark ? 'bg-blue-900/40' : 'bg-amber-100'
                 }`}>
-                  <Code2 size={44} className={isDark ? 'text-blue-400' : 'text-amber-600'} />
+                  <SquareLibrary size={44} className={isDark ? 'text-blue-400' : 'text-amber-600'} />
                 </div>
                 <h3 className={`text-4xl font-bold mb-10 tracking-wide ${isDark ? 'text-blue-300' : 'text-amber-700'}`} style={{ fontFamily: "'Outfit', sans-serif" }}>
                   Frameworks & Libraries
@@ -525,7 +567,7 @@ export default function Portfolio() {
               </div>
             </div>
 
-            {/* Databases - Takes 2 columns, shorter */}
+            {/* Databases - Takes 2 columns */}
             <div className={`md:col-span-2 p-10 rounded-3xl transition-all hover:scale-[1.02] duration-300 relative overflow-hidden ${
               isDark ? 'bg-slate-800 border border-slate-700 hover:shadow-2xl hover:shadow-blue-500/20' : 'bg-white border border-stone-200 shadow-2xl hover:shadow-2xl hover:shadow-amber-500/30'
             }`}>
@@ -559,7 +601,7 @@ export default function Portfolio() {
               </div>
             </div>
 
-            {/* Tools - Takes 2 columns, shorter */}
+            {/* Tools - Takes 2 columns */}
             <div className={`md:col-span-2 p-10 rounded-3xl transition-all hover:scale-[1.02] duration-300 relative overflow-hidden ${
               isDark ? 'bg-slate-800 border border-slate-700 hover:shadow-2xl hover:shadow-blue-500/20' : 'bg-white border border-stone-200 shadow-2xl hover:shadow-2xl hover:shadow-amber-500/30'
             }`}>
@@ -637,20 +679,22 @@ export default function Portfolio() {
             {personalData.projects.map((project, idx) => (
               <div
                 key={project.id}
-                className={`group rounded-3xl overflow-hidden transition-all duration-500 hover:scale-[1.02] ${
+                className={`group rounded-3xl overflow-hidden transition-all duration-500 hover:scale-[1.02] cursor-pointer ${
                   isDark 
                     ? 'bg-slate-900 hover:shadow-2xl hover:shadow-blue-500/20 border border-slate-800' 
                     : 'bg-white hover:shadow-2xl hover:shadow-amber-500/30 border border-stone-200'
                 } ${viewMode === 'list' ? 'flex gap-8' : ''}`}
                 style={{ transitionDelay: `${idx * 150}ms` }}
+                onClick={() => setLightboxImage({ src: project.thumbnail, title: project.title, description: project.description })}
               >
-                <div className={`relative overflow-hidden ${viewMode === 'list' ? 'w-2/5' : ''}`}>
+                <div className={`relative overflow-hidden flex items-center justify-center ${
+                  viewMode === 'list' ? 'w-2/5' : 'h-80'
+                } ${isDark ? 'bg-slate-800' : 'bg-amber-50'}`}>
                   <img 
                     src={project.thumbnail} 
                     alt={project.title}
-                    className={`w-full object-cover transition-transform duration-700 group-hover:scale-110 ${viewMode === 'list' ? 'h-full' : 'h-80'}`}
+                    className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110"
                   />
-                  <div className={`absolute inset-0 bg-gradient-to-t ${isDark ? 'from-slate-900 via-slate-900/50' : 'from-stone-900 via-stone-900/50'} to-transparent opacity-60`}></div>
                 </div>
                 <div className={`p-10 ${viewMode === 'list' ? 'flex-1' : ''}`}>
                   <h3 className={`text-3xl font-bold mb-4 tracking-wide ${isDark ? 'text-blue-300' : 'text-amber-700'}`} style={{ fontFamily: isDark ? "'Space Grotesk', sans-serif" : "'Playfair Display', serif" }}>
@@ -704,7 +748,7 @@ export default function Portfolio() {
                 <div className={`w-20 h-20 rounded-2xl flex items-center justify-center mb-6 ${
                   isDark ? 'bg-blue-900/30' : 'bg-amber-100'
                 }`}>
-                  <Award size={36} className={isDark ? 'text-blue-400' : 'text-amber-600'} />
+                  <ShieldCheck size={36} className={isDark ? 'text-blue-400' : 'text-amber-600'} />
                 </div>
                 <h3 className={`text-2xl font-bold mb-3 tracking-wide ${isDark ? 'text-blue-300' : 'text-amber-700'}`} style={{ fontFamily: "'Outfit', sans-serif" }}>
                   {cert.title}
@@ -743,7 +787,13 @@ export default function Portfolio() {
                 }`}
                 style={{ transitionDelay: `${idx * 150}ms` }}
               >
-                <div className="text-5xl mb-6">🏆</div>
+                <div className="relative z-10">
+                <div className={`w-20 h-20 rounded-2xl flex items-center justify-center mb-8 ${
+                  isDark ? 'bg-blue-900/40' : 'bg-amber-100'
+                }`}>
+                  <Award size={44} className={isDark ? 'text-blue-400' : 'text-amber-600'} />
+                </div>
+                </div>
                 <h3 className={`text-2xl font-bold mb-3 tracking-wide ${isDark ? 'text-blue-300' : 'text-amber-700'}`} style={{ fontFamily: "'Outfit', sans-serif" }}>
                   {achievement.title}
                 </h3>
